@@ -13,8 +13,8 @@ router = Router()
 
 @router.message(CommandStart())
 async def start_handler(message: Message):
-    await message.answer(f'Привет {message.from_user.full_name}!'
-                         f'\nТеперь ты можешь пользоваться шлагбаумом!')
+    await message.answer(f'✋ Привет {message.from_user.full_name}!'
+                         f'\nЗапросите доступ для использования шлагбаума, нажав /access!')
     user_id = str(message.from_user.id)
     user = db_dict.get(user_id)
 
@@ -31,19 +31,23 @@ async def start_handler(message: Message):
 @router.message(Command('open'))
 async def to_open_handler(message: Message):
     user_id = str(message.from_user.id)
-    if db_dict[user_id]['access'] == "on" or db_dict[user_id]['status'] == "admin":
-        await message.answer('Выберете шлагбаум:',reply_markup=get_open_inline_keyboard())
+    # if db_dict[user_id]['access'] == "on" or db_dict[user_id]['status'] == "admin":
+    if db_dict[user_id]['access'] == "on":
+        await message.answer('Выберете шлагбаум:', reply_markup=get_open_inline_keyboard())
         await asyncio.sleep(10)
         await message.delete()
     else:
-        await message.answer('У вас нет доступа. Запросите доступ, выбрав команду /access в меню.')
+        await message.answer('🤚 У вас нет доступа. Запросите доступ, выбрав команду /access в меню.')
 
 
 
 @router.message(Command('access'))
 async def to_request_access(message: Message):
     user_id = str(message.from_user.id)
-    await message.answer('Запрос доступа отправлен. Вам придёт уведомление о результате.')
-    await message.bot.send_message('259811443',
-                                   f'{user_id} запрашивает доступ.\n Разрешаем?',
-                                   reply_markup=allow_access_inline_keyboard(user_id))
+    if db_dict[user_id]["access"] == "off":
+        await message.answer('Запрос доступа отправлен. Вам придёт уведомление о результате.')
+        await message.bot.send_message('259811443',
+                                       f'{db_dict[user_id]["name"]} запрашивает доступ.\n Разрешаем?',
+                                       reply_markup=allow_access_inline_keyboard(user_id))
+    else:
+        await message.answer('🟢 Вам уже был предоставлен доступ.')

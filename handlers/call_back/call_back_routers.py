@@ -21,25 +21,26 @@ async def open_barrier_cb(call_back: CallbackQuery):
                 status_code = response.status
         if status_code == 200:
             user_enter = db_dict.get(user)['name'] if db_dict.get(user) else 'Неизвестный дикобраз'
-            await call_back.answer(f'Шлагбаум {barrier_number} открывается!', cache_time=5)
-            user_status = 'заехал' if db_dict.get(user)['enter'] == False else 'выехал'
-            await call_back.bot.send_message(259811443, f'{user_enter} {user_status} через шлагбаум {barrier_number}')
+            await call_back.answer(f'🚗 Шлагбаум {barrier_number} открывается!', cache_time=5)
+            user_status = '🟢 заехал' if db_dict.get(user)['enter'] == False else '🔴 выехал'
+            if user != '259811443':
+                await call_back.bot.send_message(259811443, f'{user_enter} {user_status} через шлагбаум {barrier_number}')
             db_dict[user]['enter'] = not db_dict[user]['enter']
             print(db_dict)
         else:
             await call_back.answer(f'Упс! Что-то пошло не так.')
     else:
-        await call_back.bot.send_message(user, 'Доступ был ограничен. Вы можете запросить доступ снова.')
+        await call_back.bot.send_message(user, '⛔ Доступ был ограничен. Вы можете запросить доступ снова.')
 
 
 @router.callback_query(CbAccessData.filter())
-async def allow_access_cb(call_back: CallbackQuery, call_back_data: CbAccessData):
-    user_id = call_back_data.user_id
-    if call_back_data.access:
+async def allow_access_cb(callback_query: CallbackQuery, callback_data: CbAccessData):
+    user_id = callback_data.user_id
+    if callback_data.access:
         db_dict[user_id]["access"] = "on"
         json_wright()
-        await call_back.answer("Доступ был разрешён!")
-        await call_back.bot.send_message(user_id, "Доступ разрешён!")
+        await callback_query.answer("🟢 Доступ был разрешён!")
+        await callback_query.bot.send_message(user_id, "Вам был разрешён доступ к управлению шлагбаумом!")
     else:
-        await call_back.answer("Доступ был запрещён!")
-        await call_back.bot.send_message(user_id, "Доступ запрещён!")
+        await callback_query.answer("⛔ Доступ был запрещён!")
+        await callback_query.bot.send_message(user_id, "Доступ к управлению шлагбаумом был запрещён!")
