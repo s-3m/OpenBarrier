@@ -1,1 +1,3 @@
 from .inline_keyboards.open_barrier_kb import get_open_inline_keyboard
+from .inline_keyboards.open_barrier_kb import allow_access_inline_keyboard
+from .inline_keyboards.open_barrier_kb import CbAccessData
