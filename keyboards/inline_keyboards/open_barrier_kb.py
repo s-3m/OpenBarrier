@@ -39,3 +39,8 @@ def allow_access_inline_keyboard(user_id) -> InlineKeyboardMarkup:
     builder.adjust(1)
 
     return builder.as_markup()
+
+def get_wait_temporary_kb() -> InlineKeyboardMarkup:
+    builder = InlineKeyboardBuilder()
+    builder.row(InlineKeyboardButton(text='Ожидаем ответа...', callback_data='wait_temporary_kb'))
+    return builder.as_markup()
