@@ -29,6 +29,7 @@ async def open_barrier_cb(call_back: CallbackQuery):
             if user != '259811443':
                 await call_back.bot.send_message(259811443, f'{user_enter} {user_status} через шлагбаум {barrier_number}')
             db_dict[user]['enter'] = not db_dict[user]['enter']
+            json_wright()
             print(db_dict)
         else:
             await call_back.answer(f'Упс! Что-то пошло не так.')

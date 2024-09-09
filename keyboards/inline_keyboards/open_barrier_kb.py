@@ -9,12 +9,12 @@ def get_open_inline_keyboard() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
 
     builder.row(
-        InlineKeyboardButton(text='🚧 1️⃣ 🚧', callback_data='barrier_1'),
-        InlineKeyboardButton(text='🚧 2️⃣ 🚧', callback_data='barrier_2'),
+        InlineKeyboardButton(text='1️⃣ ШЛАГБАУМ 🚧', callback_data='barrier_1'),
+        InlineKeyboardButton(text='2️⃣ ШЛАГБАУМ 🚧', callback_data='barrier_2'),
     )
     builder.row(
-        InlineKeyboardButton(text='🚧 3️⃣ 🚧', callback_data='barrier_3'),
-        InlineKeyboardButton(text='🚧 4️⃣ 🚧', callback_data='barrier_4'),
+        InlineKeyboardButton(text='3️⃣ ШЛАГБАУМ 🚧', callback_data='barrier_3'),
+        InlineKeyboardButton(text='4️⃣ ШЛАГБАУМ 🚧', callback_data='barrier_4'),
     )
     builder.adjust(1)
     return builder.as_markup()
@@ -42,5 +42,5 @@ def allow_access_inline_keyboard(user_id) -> InlineKeyboardMarkup:
 
 def get_wait_temporary_kb() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
-    builder.row(InlineKeyboardButton(text='Ожидаем ответа...', callback_data='wait_temporary_kb'))
+    builder.row(InlineKeyboardButton(text='⏳ Ожидаем открытия...', callback_data='wait_temporary_kb'))
     return builder.as_markup()
