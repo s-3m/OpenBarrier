@@ -1,11 +1,9 @@
 import asyncio
-import json
 import os
 import logging
 from aiogram import Bot, Dispatcher
 from dotenv import load_dotenv
 from handlers import router as handler_routers
-from db import db_dict
 
 
 load_dotenv()
