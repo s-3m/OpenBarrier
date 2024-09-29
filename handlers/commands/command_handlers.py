@@ -31,8 +31,8 @@ async def start_handler(message: Message):
 @router.message(Command('open'))
 async def to_open_handler(message: Message):
     user_id = str(message.from_user.id)
-    # if db_dict[user_id]['access'] == "on" or db_dict[user_id]['status'] == "admin":
-    if db_dict[user_id]['access'] == "on":
+    if db_dict[user_id]['access'] == "on" or db_dict[user_id]['status'] == "admin":
+    # if db_dict[user_id]['access'] == "on":
         await message.answer('Выберете шлагбаум:', reply_markup=get_open_inline_keyboard())
         await asyncio.sleep(10)
         await message.delete()
