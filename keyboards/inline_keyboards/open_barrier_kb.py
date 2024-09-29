@@ -20,7 +20,6 @@ def get_open_inline_keyboard() -> InlineKeyboardMarkup:
     return builder.as_markup()
 
 
-
 class CbAccessData(CallbackData, prefix="access_data"):
     user_id: str
     access: bool
@@ -39,6 +38,7 @@ def allow_access_inline_keyboard(user_id) -> InlineKeyboardMarkup:
     builder.adjust(1)
 
     return builder.as_markup()
+
 
 def get_wait_temporary_kb() -> InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()

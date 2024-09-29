@@ -16,6 +16,10 @@ router = Router()
 async def open_barrier_cb(call_back: CallbackQuery):
     barrier_number = call_back.data.split('_')[1]
     user = str(call_back.from_user.id)
+    access_user = db_dict.get(user)
+    if not access_user:
+        await call_back.answer('⛔ Доступ запрещён. Вы можете запросить доступ, используя команду /access', show_alert=True)
+        return
     if db_dict[user]["access"] == "on":
         await call_back.message.edit_reply_markup(reply_markup=get_wait_temporary_kb())
         async with aiohttp.ClientSession() as session:
@@ -27,7 +31,7 @@ async def open_barrier_cb(call_back: CallbackQuery):
         if status_code == 200:
             user_enter = db_dict.get(user)['name'] if db_dict.get(user) else 'Неизвестный дикобраз'
             await call_back.answer(f'🚗 Шлагбаум {barrier_number} открывается!', cache_time=5)
-            user_status = '🟢 заехал' if db_dict.get(user)['enter'] is False else '🔴 выехал'
+            user_status = '🚗➡️ заехал' if db_dict.get(user)['enter'] is False else '⬅️🚗 выехал'
             if user != '259811443':
                 await call_back.bot.send_message(259811443,
                                                  f'{user_enter} {user_status} через шлагбаум {barrier_number}')
@@ -48,7 +52,12 @@ async def allow_access_cb(callback_query: CallbackQuery, callback_data: CbAccess
         db_dict[user_id]["access"] = "on"
         json_wright()
         await callback_query.answer("🟢 Доступ был разрешён!")
-        await callback_query.bot.send_message(user_id, "Вам был разрешён доступ к управлению шлагбаумом!")
+        await callback_query.bot.send_message(user_id, " 🟢 Вам был разрешён доступ к управлению шлагбаумом!")
+        await callback_query.message.delete_reply_markup()
+        await callback_query.message.edit_text(f'🟢 Доступ для {db_dict[user_id]['name']} был разрешён!')
     else:
         await callback_query.answer("⛔ Доступ был запрещён!")
-        await callback_query.bot.send_message(user_id, "Доступ к управлению шлагбаумом был запрещён!")
+        await callback_query.bot.send_message(user_id, "⛔ Доступ к управлению шлагбаумом был запрещён!")
+        await callback_query.message.delete_reply_markup()
+        await callback_query.message.edit_text(f'⛔ Доступ для {db_dict[user_id]['name']} был заблокирован!')
+
